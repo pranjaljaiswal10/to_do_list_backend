@@ -2,9 +2,10 @@
   "name": "todolist",
   "version": "1.0.0",
   "description": "practice crud operation",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev":"nodemon -r dotenv/config src/index.js"
   },
   "author": "Pranjal Jaiswal",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.4"
+    "mongoose": "^8.8.4",
+    "nodemon": "^3.1.7"
   }
 }
