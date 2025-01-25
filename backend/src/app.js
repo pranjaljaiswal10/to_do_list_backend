@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser"
 import express from "express"
+import { authRouter } from "./routes/auth.route.js"
 
 const app=express()
 
@@ -8,7 +9,7 @@ app.use(express.urlencoded({extended:true,limit:"16kb"})) // parses incoming req
 app.use(express.static("public"))
 app.use(cookieParser())
 
-app.use("/api/v1/users",)
+app.use("/api/v1/users",authRouter)
 
 export {app}
 
