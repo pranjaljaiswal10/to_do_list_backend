@@ -1,0 +1,1 @@
+export const BASE_URL=location.hostname==="localhost"?"https://localhost:3000":"/api"
