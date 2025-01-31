@@ -27,8 +27,6 @@ const userSchema = new mongoose.Schema(
   { timestamp: true }
 );
 
-export const User = mongoose.model("User", userSchema);
-
 userSchema.methods.validatePassword = async function (passwordByUser) {
   const user = this;
   const isValidPassword = await bcrypt.compare(passwordByUser, user.password);
@@ -42,3 +40,5 @@ userSchema.methods.getJWT = function () {
   });
   return token;
 };
+
+export const User = mongoose.model("User", userSchema);

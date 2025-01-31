@@ -3,16 +3,16 @@ import { createContext, useReducer } from "react";
 const UserContext=createContext()
 
 const initialState={
-    user:null
+    userData:null
 };
 
 function reducer(state,action){
     const {type,payload}=action
     switch(type){
        case "LOGIN":
-        return  {...state,user:payload}
+        return  {...state,userData:payload}
        case "LOGOUT":
-        return state.user=null
+        return {...state,userData:null}
     }    
 }
 

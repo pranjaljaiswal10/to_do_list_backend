@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const authverify = asyncHanlder(async (req, res, next) => {
   try {
     const token =
-      req.cookie.token || req.header("authorization")?.replace("Bearer", "");
+      req.cookies.token || req.header("authorization")?.replace("Bearer", "");
     if (!token) {
       throw new ApiError(401, { error: "Unauthorized Access" });
     }

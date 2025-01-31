@@ -8,6 +8,6 @@ const todoRouter=express.Router();
 todoRouter.post("/",authverify,addTask)
 todoRouter.get("/",authverify,readAllTask)
 todoRouter.put("/:id",authverify,updateTask)
-todoRouter.delete(":/id",authverify,removeTask)
+todoRouter.delete("/:id",authverify,removeTask)
 
 export {todoRouter}

@@ -5,37 +5,47 @@ import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registeredUser = asyncHanlder(async (req, res) => {
-    try{
-  const { username, email, password, profilePictureUrl } = req.body;
-  if ([username, email, password].some((field) => field.trim() === "")) {
-    throw new ApiError(400, "All field is required");
-  }
-  const validUser = await User.findOne({
-    $or: [{username}, {email}],
-  });
-  if (validUser) {
-    throw new ApiError(401, "User is already exist");
-  } else {
-    const hashPassword = await bcrypt.hash(password, 10);
-    const user = {
-      username,
-      email,
-      password: hashPassword,
-    };
-    if (profilePictureUrl) {
-      user.profilePictureUrl = profilePictureUrl;
+  try {
+    const { username, email, password, profilePictureUrl } = req.body;
+    if ([username, email, password].some((field) => field.trim() === "")) {
+      throw new ApiError(400, "All field is required");
     }
-    const newUser = await User.create(user);
-    const token = newUser.getJWT();
-    const option = {
-      secure: true,
-      httpOnly: true,
-    };
-    res.cookies("token", token, option);
-    ApiResponse(201, newUser, "User Registered Successfully");
-  }}catch(error){
-    console.log(error)
-    throw new ApiError(500,{message:"Something wen't wrong"})
+    const validUser = await User.findOne({
+      $or: [{ username }, { email }],
+    });
+    if (validUser) {
+      throw new ApiError(401, "User is already exist");
+    } else {
+      const hashPassword = await bcrypt.hash(password, 10);
+      const user = {
+        username,
+        email,
+        password: hashPassword,
+      };
+      if (profilePictureUrl) {
+        user.profilePictureUrl = profilePictureUrl;
+      }
+      const newUser = new User(user);
+      const savedUser = await newUser.save();
+      const token = savedUser.getJWT();
+      const option = {
+        secure: true,
+        httpOnly: true,
+      };
+      res.cookie("token", token, option);
+      res
+        .status(201)
+        .json(
+          new ApiResponse(
+            201,
+            {user: newUser, token },
+            "User Registered Successfully"
+          )
+        );
+    }
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, { message: "Something wen't wrong" });
   }
 });
 
@@ -56,8 +66,16 @@ const logInUser = asyncHanlder(async (req, res) => {
     secure: true,
     httpOnly: true,
   };
-  res.cookies("token", token, option);
-  ApiResponse(200, User, token, "User login successfully");
+  res
+    .cookie("token", token, option)
+    .json(
+      new ApiResponse(200, { user: findUser, token }, "User login successfully")
+    );
 });
 
-export { registeredUser, logInUser };
+const logoutUser = asyncHanlder(async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json(new ApiResponse(200, {}, "logout successfully"));
+});
+
+export { registeredUser, logInUser, logoutUser };

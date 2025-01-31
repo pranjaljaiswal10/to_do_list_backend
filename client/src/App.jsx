@@ -4,6 +4,8 @@ import Layout from "./Layout";
 import Home from "./components/Home";
 import Signin from "./components/Signin";
 import Signup from "./components/Signup";
+import PrivateRoute from "./components/PrivateRoute";
+import List from "./components/List";
 
 const App = createBrowserRouter([
   {
@@ -21,6 +23,14 @@ const App = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/todo",
+        element: (
+          <PrivateRoute>
+            <List />
+          </PrivateRoute>
+        ),
       },
     ],
   },
