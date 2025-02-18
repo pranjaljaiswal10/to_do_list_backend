@@ -6,19 +6,28 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const [formData, setformData] = useState({ email: "", password: "" });
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const { dispatch } = useContext(UserContext);
   const handleChange = (e) => {
     setformData({
       ...formData,
-      [e.target.id]:e.target.value
+      [e.target.id]: e.target.value,
     });
   };
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const response = await axios.post(`${BASE_URL}/api/v1/user/login`, formData);
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/user/login`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials:true
+        }
+      );
       dispatch({ type: "LOGIN", payload: response.data.data });
       console.log(response.data);
       navigate(location?.state?.from?.pathname || "/");
@@ -29,7 +38,8 @@ const Signin = () => {
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       <label htmlFor="email">
-       email: <input
+        email:{" "}
+        <input
           type="text"
           id="email"
           value={formData.email}
@@ -37,7 +47,8 @@ const Signin = () => {
         />
       </label>
       <label htmlFor="password">
-       password: <input
+        password:{" "}
+        <input
           type="password"
           id="password"
           value={formData.password}

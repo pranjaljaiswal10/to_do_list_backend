@@ -66,9 +66,7 @@ const logInUser = asyncHanlder(async (req, res) => {
     secure: true,
     httpOnly: true,
   };
-  res
-    .cookie("token", token, option)
-    .json(
+  res.cookie("token", token, option).json(
       new ApiResponse(200, { user: findUser, token }, "User login successfully")
     );
 });

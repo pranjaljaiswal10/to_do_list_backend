@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHanlder } from "../utils/asyncHandler.js";
 
 const addTask = asyncHanlder(async (req, res) => {
+  try{
   const { content, complete } = req.body;
   const userid = req?.user?._id;
   const createdBy = userid;
@@ -16,9 +17,12 @@ const addTask = asyncHanlder(async (req, res) => {
   res.status(200).json(
     new ApiResponse(201, {
       message: "new task added successfully",
-      user: savedTask,
+      task: savedTask,
     })
-  );
+  );}catch(error){
+    console.log(error)
+    throw new ApiError(500,"Something went't wrong, can't add task")
+  }
 });
 
 const updateTask = asyncHanlder(async (req, res) => {

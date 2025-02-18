@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const authverify = asyncHanlder(async (req, res, next) => {
   try {
     const token =
-      req.cookies.token || req.header("authorization")?.replace("Bearer", "");
+      req?.cookies?.token || req.header("authorization")?.replace("Bearer", "");
     if (!token) {
       throw new ApiError(401, { error: "Unauthorized Access" });
     }
@@ -19,7 +19,8 @@ const authverify = asyncHanlder(async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    throw new ApiError(500, "Something wen't wrong");
+    console.log(error)
+    throw new ApiError(401, "Invalid access token"|| error.message);
   }
 });
 
